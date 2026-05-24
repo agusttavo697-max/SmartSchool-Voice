@@ -1,255 +1,118 @@
-<!DOCTYPE html><html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartSchool Voice</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 text-gray-800">  <header class="bg-blue-700 text-white shadow-lg sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between flex-wrap gap-4">
-      <div>
-        <h1 class="text-2xl md:text-3xl font-bold">SmartSchool Voice</h1>
-        <p class="text-sm opacity-90">Participação estudantil com inteligência de dados</p>
-      </div><nav class="flex gap-3 flex-wrap">
-    <a href="#dashboard" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl transition">Dashboard</a>
-    <a href="#questionario" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl transition">Questionário</a>
-    <a href="#problemas" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl transition">Problemas</a>
-    <a href="#sugestoes" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl transition">Sugestões</a>
-  </nav>
-</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
 
-  </header>  <main class="max-w-7xl mx-auto p-4 md:p-6"><section class="bg-gradient-to-r from-blue-700 to-blue-500 text-white rounded-3xl p-8 shadow-2xl mb-8">
-  <div class="max-w-3xl">
-    <h2 class="text-4xl md:text-5xl font-bold mb-4">
-      Transformando a voz dos alunos em melhorias reais.
-    </h2>
+import {
+  getDatabase,
+  ref,
+  push,
+  onValue
+} from "https://www.gstatic.com/firebasejs/12.13.0/firebase-database.js";
 
-    <p class="text-lg opacity-95 mb-6">
-      Uma plataforma inteligente para analisar opiniões estudantis, detectar problemas e ajudar escolas a evoluírem através de dados.
-    </p>
+const firebaseConfig = {
+  apiKey: "SUA_API",
+  authDomain: "smartschool-voice.firebaseapp.com",
+  databaseURL: "https://smartschool-voice-default-rtdb.firebaseio.com",
+  projectId: "smartschool-voice",
+  storageBucket: "smartschool-voice.firebasestorage.app",
+  messagingSenderId: "887720139006",
+  appId: "1:887720139006:web:ba6e287345a32bbd8c6daf",
+  measurementId: "G-Z17KJ30NLF"
+};
 
-    <button class="bg-white text-blue-700 font-bold px-6 py-3 rounded-2xl hover:scale-105 transition">
-      Participar Agora
-    </button>
-  </div>
-</section>
+const app = initializeApp(firebaseConfig);
 
-<section id="dashboard" class="grid lg:grid-cols-3 gap-6 mb-8">
+const db = getDatabase(app);
 
-  <div class="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition">
-    <h3 class="text-lg font-semibold mb-2">Índice Escolar</h3>
-    <div id="indice" class="text-5xl font-bold text-blue-700">0%</div>
-    <p class="text-gray-500 mt-2">Satisfação geral dos alunos</p>
-  </div>
+window.enviarSugestao = function () {
 
-  <div class="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition">
-    <h3 class="text-lg font-semibold mb-2">Participações</h3>
-    <div id="participacoes" class="text-5xl font-bold text-blue-700">0</div>
-    <p class="text-gray-500 mt-2">Respostas recebidas</p>
-  </div>
+  const sugestao = document.getElementById("sugestao").value;
 
-  <div class="bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition">
-    <h3 class="text-lg font-semibold mb-2">Problema Mais Citado</h3>
-    <div id="problemaPrincipal" class="text-2xl font-bold text-red-500">Sem dados</div>
-    <p class="text-gray-500 mt-2">Atualizado automaticamente</p>
-  </div>
+  if (sugestao.trim() === "") {
+    alert("Digite uma sugestão");
+    return;
+  }
 
-</section>
+  push(ref(db, "sugestoes"), {
+    texto: sugestao,
+    data: new Date().toLocaleString()
+  });
 
-<section class="grid lg:grid-cols-2 gap-6 mb-8">
+  alert("Sugestão enviada!");
 
-  <div class="bg-white rounded-3xl p-6 shadow-lg">
-    <h2 class="text-2xl font-bold mb-6">Avaliação da Escola</h2>
+  document.getElementById("sugestao").value = "";
+};
 
-    <div class="space-y-5">
+window.enviarQuestionario = function () {
 
-      <div>
-        <div class="flex justify-between mb-2">
-          <span class="font-semibold">Limpeza</span>
-          <span id="txtLimpeza">0%</span>
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-          <div id="limpeza" class="bg-blue-600 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
-        </div>
-      </div>
+  const limpeza = Number(document.getElementById('qLimpeza').value);
 
-      <div>
-        <div class="flex justify-between mb-2">
-          <span class="font-semibold">Segurança</span>
-          <span id="txtSeguranca">0%</span>
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-          <div id="seguranca" class="bg-blue-600 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
-        </div>
-      </div>
+  const seguranca = Number(document.getElementById('qSeguranca').value);
 
-      <div>
-        <div class="flex justify-between mb-2">
-          <span class="font-semibold">Merenda</span>
-          <span id="txtMerenda">0%</span>
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-          <div id="merenda" class="bg-blue-600 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
-        </div>
-      </div>
+  const merenda = Number(document.getElementById('qMerenda').value);
 
-      <div>
-        <div class="flex justify-between mb-2">
-          <span class="font-semibold">Conforto</span>
-          <span id="txtConforto">0%</span>
-        </div>
-        <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-          <div id="conforto" class="bg-blue-600 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
-        </div>
-      </div>
+  const conforto = Number(document.getElementById('qConforto').value);
 
-    </div>
-  </div>
+  push(ref(db, "questionarios"), {
+    limpeza,
+    seguranca,
+    merenda,
+    conforto,
+    data: new Date().toLocaleString()
+  });
 
-  <div id="problemas" class="bg-white rounded-3xl p-6 shadow-lg">
-    <h2 class="text-2xl font-bold mb-6">Mapa de Problemas</h2>
+  alert("Questionário enviado!");
+};
 
-    <div id="listaProblemas" class="space-y-4">
-      <div class="bg-gray-100 rounded-2xl p-4 text-gray-500 text-center">
-        Nenhum relato enviado ainda.
-      </div>
-    </div>
-  </div>
+const respostasRef = ref(db, "questionarios");
 
-</section>
+onValue(respostasRef, (snapshot) => {
 
-<section id="questionario" class="bg-white rounded-3xl p-6 shadow-lg mb-8">
-  <h2 class="text-3xl font-bold mb-6">Questionário Escolar</h2>
+  const dados = snapshot.val();
 
-  <div class="grid md:grid-cols-2 gap-6">
+  if (!dados) return;
 
-    <div>
-      <label class="font-semibold block mb-2">Como você avalia a limpeza da escola?</label>
-      <select id="qLimpeza" class="w-full border rounded-2xl p-3 outline-none">
-        <option value="0">Selecione</option>
-        <option value="25">Ruim</option>
-        <option value="50">Regular</option>
-        <option value="75">Boa</option>
-        <option value="100">Excelente</option>
-      </select>
-    </div>
+  const valores = Object.values(dados);
 
-    <div>
-      <label class="font-semibold block mb-2">Como você avalia a segurança?</label>
-      <select id="qSeguranca" class="w-full border rounded-2xl p-3 outline-none">
-        <option value="0">Selecione</option>
-        <option value="25">Ruim</option>
-        <option value="50">Regular</option>
-        <option value="75">Boa</option>
-        <option value="100">Excelente</option>
-      </select>
-    </div>
+  let somaLimpeza = 0;
+  let somaSeguranca = 0;
+  let somaMerenda = 0;
+  let somaConforto = 0;
 
-    <div>
-      <label class="font-semibold block mb-2">Como você avalia a merenda?</label>
-      <select id="qMerenda" class="w-full border rounded-2xl p-3 outline-none">
-        <option value="0">Selecione</option>
-        <option value="25">Ruim</option>
-        <option value="50">Regular</option>
-        <option value="75">Boa</option>
-        <option value="100">Excelente</option>
-      </select>
-    </div>
+  valores.forEach(item => {
+    somaLimpeza += item.limpeza;
+    somaSeguranca += item.seguranca;
+    somaMerenda += item.merenda;
+    somaConforto += item.conforto;
+  });
 
-    <div>
-      <label class="font-semibold block mb-2">Como você avalia o conforto das salas?</label>
-      <select id="qConforto" class="w-full border rounded-2xl p-3 outline-none">
-        <option value="0">Selecione</option>
-        <option value="25">Ruim</option>
-        <option value="50">Regular</option>
-        <option value="75">Boa</option>
-        <option value="100">Excelente</option>
-      </select>
-    </div>
+  const total = valores.length;
 
-  </div>
+  const mediaLimpeza = Math.round(somaLimpeza / total);
+  const mediaSeguranca = Math.round(somaSeguranca / total);
+  const mediaMerenda = Math.round(somaMerenda / total);
+  const mediaConforto = Math.round(somaConforto / total);
 
-  <button onclick="enviarQuestionario()" class="mt-6 bg-blue-700 hover:bg-blue-800 text-white px-8 py-3 rounded-2xl font-semibold transition hover:scale-105">
-    Enviar Respostas
-  </button>
-</section>
+  atualizarBarra('limpeza', 'txtLimpeza', mediaLimpeza);
 
-<section id="sugestoes" class="bg-white rounded-3xl p-6 shadow-lg mb-8">
-  <h2 class="text-3xl font-bold mb-4">Enviar Sugestão</h2>
+  atualizarBarra('seguranca', 'txtSeguranca', mediaSeguranca);
 
-  <textarea id="sugestao" class="w-full border rounded-2xl p-4 h-32 outline-none" placeholder="Digite sua sugestão para melhorar a escola..."></textarea>
+  atualizarBarra('merenda', 'txtMerenda', mediaMerenda);
 
-  <button onclick="enviarSugestao()" class="mt-4 bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-2xl font-semibold transition hover:scale-105">
-    Enviar Sugestão
-  </button>
+  atualizarBarra('conforto', 'txtConforto', mediaConforto);
 
-  <p id="mensagem" class="mt-4 font-semibold"></p>
-</section>
+  const mediaGeral = Math.round(
+    (
+      mediaLimpeza +
+      mediaSeguranca +
+      mediaMerenda +
+      mediaConforto
+    ) / 4
+  );
 
-  </main>  <script>
-    let participacoes = 0;
+  document.getElementById('indice').innerText =
+    mediaGeral + '%';
 
-    function enviarSugestao() {
-      const mensagem = document.getElementById('mensagem');
-      const sugestao = document.getElementById('sugestao').value;
-
-      if (sugestao.trim() === '') {
-        mensagem.innerText = 'Digite uma sugestão antes de enviar.';
-        mensagem.className = 'mt-4 text-red-500 font-semibold';
-        return;
-      }
-
-      mensagem.innerText = 'Sugestão enviada com sucesso!';
-      mensagem.className = 'mt-4 text-green-600 font-semibold';
-
-      document.getElementById('sugestao').value = '';
-    }
-
-    function enviarQuestionario() {
-      const limpeza = Number(document.getElementById('qLimpeza').value);
-      const seguranca = Number(document.getElementById('qSeguranca').value);
-      const merenda = Number(document.getElementById('qMerenda').value);
-      const conforto = Number(document.getElementById('qConforto').value);
-
-      atualizarBarra('limpeza', 'txtLimpeza', limpeza);
-      atualizarBarra('seguranca', 'txtSeguranca', seguranca);
-      atualizarBarra('merenda', 'txtMerenda', merenda);
-      atualizarBarra('conforto', 'txtConforto', conforto);
-
-      const media = Math.round((limpeza + seguranca + merenda + conforto) / 4);
-      document.getElementById('indice').innerText = media + '%';
-
-      participacoes++;
-      document.getElementById('participacoes').innerText = participacoes;
-
-      atualizarProblema(media);
-    }
-
-    function atualizarBarra(id, textoId, valor) {
-      document.getElementById(id).style.width = valor + '%';
-      document.getElementById(textoId).innerText = valor + '%';
-    }
-
-    function atualizarProblema(media) {
-      const problema = document.getElementById('problemaPrincipal');
-      const lista = document.getElementById('listaProblemas');
-
-      if (media <= 50) {
-        problema.innerText = 'Infraestrutura';
-        lista.innerHTML = `
-          <div class="flex justify-between bg-gray-100 rounded-2xl p-4">
-            <span class="font-semibold">Infraestrutura</span>
-            <span class="bg-red-500 text-white px-4 py-1 rounded-full">Novo relato</span>
-          </div>
-        `;
-      } else {
-        problema.innerText = 'Sem problemas críticos';
-        lista.innerHTML = `
-          <div class="bg-green-100 text-green-700 rounded-2xl p-4 text-center font-semibold">
-            Nenhum problema crítico identificado.
-          </div>
-        `;
-      }
-    }
-  </script></body>
-</html>
+  document.getElementById('participacoes').innerText =
+    total;
+});
+</script>
