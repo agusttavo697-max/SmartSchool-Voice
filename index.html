@@ -1,0 +1,189 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartSchool Voice</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">  <div class="max-w-6xl mx-auto"><div class="bg-blue-700 text-white rounded-3xl p-8 shadow-xl mb-6">
+  <h1 class="text-4xl font-bold mb-2">SmartSchool Voice</h1>
+  <p class="text-lg opacity-90">
+    Transformando a voz dos alunos em melhorias reais.
+  </p>
+</div>
+
+<div class="grid md:grid-cols-3 gap-6 mb-6">
+
+  <div class="bg-white rounded-3xl p-6 shadow-lg">
+    <h2 class="text-xl font-bold mb-2">Índice Escolar</h2>
+    <div id="indice" class="text-5xl font-bold text-blue-700">84%</div>
+    <p class="text-gray-500 mt-2">Bem-estar escolar geral</p>
+  </div>
+
+  <div class="bg-white rounded-3xl p-6 shadow-lg">
+    <h2 class="text-xl font-bold mb-2">Participações</h2>
+    <div class="text-5xl font-bold text-blue-700">1.245</div>
+    <p class="text-gray-500 mt-2">Opiniões coletadas</p>
+  </div>
+
+  <div class="bg-white rounded-3xl p-6 shadow-lg">
+    <h2 class="text-xl font-bold mb-2">Problema Mais Citado</h2>
+    <div class="text-3xl font-bold text-red-500">Banheiros</div>
+    <p class="text-gray-500 mt-2">Necessita manutenção urgente</p>
+  </div>
+
+</div>
+
+<div class="grid md:grid-cols-2 gap-6 mb-6">
+
+  <div class="bg-white rounded-3xl p-6 shadow-lg">
+    <h2 class="text-2xl font-bold mb-4">Avaliação da Escola</h2>
+
+    <div class="space-y-5">
+
+      <div>
+        <div class="flex justify-between mb-1">
+          <span class="font-semibold">Limpeza</span>
+          <button onclick="melhorar('limpeza', 78)" class="bg-blue-700 text-white px-3 py-1 rounded-xl text-sm">
+            Melhorar
+          </button>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+          <div id="limpeza" class="bg-blue-600 h-4 rounded-full" style="width: 78%"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-between mb-1">
+          <span class="font-semibold">Segurança</span>
+          <button onclick="melhorar('seguranca', 88)" class="bg-blue-700 text-white px-3 py-1 rounded-xl text-sm">
+            Melhorar
+          </button>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+          <div id="seguranca" class="bg-blue-600 h-4 rounded-full" style="width: 88%"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-between mb-1">
+          <span class="font-semibold">Merenda</span>
+          <button onclick="melhorar('merenda', 64)" class="bg-blue-700 text-white px-3 py-1 rounded-xl text-sm">
+            Melhorar
+          </button>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+          <div id="merenda" class="bg-blue-600 h-4 rounded-full" style="width: 64%"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex justify-between mb-1">
+          <span class="font-semibold">Conforto das Salas</span>
+          <button onclick="melhorar('conforto', 59)" class="bg-blue-700 text-white px-3 py-1 rounded-xl text-sm">
+            Melhorar
+          </button>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-4">
+          <div id="conforto" class="bg-blue-600 h-4 rounded-full" style="width: 59%"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bg-white rounded-3xl p-6 shadow-lg">
+    <h2 class="text-2xl font-bold mb-4">Mapa de Problemas</h2>
+
+    <div class="space-y-4">
+      <div class="flex justify-between bg-gray-100 rounded-2xl p-4">
+        <span class="font-semibold">Banheiros</span>
+        <span class="bg-red-500 text-white px-4 py-1 rounded-full">82 relatos</span>
+      </div>
+
+      <div class="flex justify-between bg-gray-100 rounded-2xl p-4">
+        <span class="font-semibold">Salas Quentes</span>
+        <span class="bg-red-500 text-white px-4 py-1 rounded-full">74 relatos</span>
+      </div>
+
+      <div class="flex justify-between bg-gray-100 rounded-2xl p-4">
+        <span class="font-semibold">Merenda</span>
+        <span class="bg-red-500 text-white px-4 py-1 rounded-full">51 relatos</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bg-white rounded-3xl p-6 shadow-lg mb-6">
+  <h2 class="text-2xl font-bold mb-4">Enviar Sugestão</h2>
+
+  <textarea
+    id="sugestao"
+    class="w-full border rounded-2xl p-4 h-32 outline-none"
+    placeholder="Digite sua sugestão para melhorar a escola..."
+  ></textarea>
+
+  <button
+    onclick="enviarSugestao()"
+    class="mt-4 bg-blue-700 hover:bg-blue-800 text-white px-6 py-3 rounded-2xl font-semibold transition"
+  >
+    Enviar Sugestão
+  </button>
+
+  <p id="mensagem" class="mt-3 text-green-600 font-semibold"></p>
+</div>
+
+<div class="bg-blue-700 text-white rounded-3xl p-6 shadow-xl text-center">
+  <h2 class="text-2xl font-bold mb-2">
+    Participação estudantil com inteligência de dados
+  </h2>
+  <p class="opacity-90">
+    Uma solução inovadora para transformar escolas através da voz dos alunos.
+  </p>
+</div>
+
+  </div>  <script>
+    function enviarSugestao() {
+      const sugestao = document.getElementById('sugestao').value;
+      const mensagem = document.getElementById('mensagem');
+
+      if (sugestao.trim() === '') {
+        mensagem.innerText = 'Digite uma sugestão antes de enviar.';
+        mensagem.classList.remove('text-green-600');
+        mensagem.classList.add('text-red-500');
+        return;
+      }
+
+      mensagem.innerText = 'Sugestão enviada com sucesso!';
+      mensagem.classList.remove('text-red-500');
+      mensagem.classList.add('text-green-600');
+
+      document.getElementById('sugestao').value = '';
+    }
+
+    function melhorar(id) {
+      const barra = document.getElementById(id);
+      let largura = parseInt(barra.style.width);
+
+      if (largura < 100) {
+        largura += 5;
+        barra.style.width = largura + '%';
+      }
+
+      atualizarIndice();
+    }
+
+    function atualizarIndice() {
+      const barras = ['limpeza', 'seguranca', 'merenda', 'conforto'];
+      let soma = 0;
+
+      barras.forEach(id => {
+        soma += parseInt(document.getElementById(id).style.width);
+      });
+
+      const media = Math.round(soma / barras.length);
+      document.getElementById('indice').innerText = media + '%';
+    }
+  </script></body>
+          </html>
